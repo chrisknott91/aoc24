@@ -1,40 +1,33 @@
 package main
 
 import (
-	"os"
+	"reflect"
 	"testing"
 )
 
-func TestReadInput(t *testing.T) {
-	// Create a temporary file with test data
-	file, err := os.CreateTemp("", "test_input.txt")
-	if err != nil {
-		t.Fatalf("error creating temp file: %v", err)
+func TestSplitInput(t *testing.T) {
+	input := []string{
+		"3 4",
+		"4 3",
+		"2 5",
+		"1 3",
+		"3 9",
+		"3 3",
 	}
-	defer os.Remove(file.Name())
-
-	// Write test data to the file
-	file.WriteString("3 4\n4 3\n2 5\n1 3\n3 9\n3 3\n")
-	file.Close()
-
-	left, right := readInput(file.Name())
 
 	expectedLeft := []int{3, 4, 2, 1, 3, 3}
 	expectedRight := []int{4, 3, 5, 3, 9, 3}
 
-	for i, v := range left {
-		if v != expectedLeft[i] {
-			t.Errorf("expected left[%d] = %d, got %d", i, expectedLeft[i], v)
-		}
+	left, right := splitInput(input)
+
+	if !reflect.DeepEqual(left, expectedLeft) {
+		t.Errorf("expected left = %v, got %v", expectedLeft, left)
 	}
 
-	for i, v := range right {
-		if v != expectedRight[i] {
-			t.Errorf("expected right[%d] = %d, got %d", i, expectedRight[i], v)
-		}
+	if !reflect.DeepEqual(right, expectedRight) {
+		t.Errorf("expected right = %v, got %v", expectedRight, right)
 	}
 }
-
 func TestSimilarityScore(t *testing.T) {
 	left := []int{3, 4, 2, 1, 3, 3}
 	right := []int{4, 3, 5, 3, 9, 3}

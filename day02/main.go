@@ -1,26 +1,17 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
+	"github.com/chrisknott91/aoc24/utils"
 	"strconv"
 	"strings"
 )
 
 func main() {
-	file, err := os.Open("inputs/day02.txt")
-	if err != nil {
-		fmt.Println("error opening file:", err)
-		return
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
+	input := utils.ReadInput("inputs/day02.txt")
 	safeCount := 0
 
-	for scanner.Scan() {
-		line := scanner.Text()
+	for _, line := range input {
 		levels := parseLine(line)
 		if isSafe(levels) {
 			safeCount++

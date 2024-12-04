@@ -2,26 +2,34 @@ package main
 
 import (
 	"fmt"
+	"github.com/chrisknott91/aoc24/utils"
 	"log"
 	"math"
-	"os"
 	"sort"
+	"strconv"
+	"strings"
 )
 
-func readInput(filePath string) (left []int, right []int) {
-	file, fileError := os.Open(filePath)
-	if fileError != nil {
-		log.Fatalf("error opening file: %v", fileError)
-	}
-	defer file.Close()
+func main() {
+	input := utils.ReadInput("inputs/day01.txt")
+	left, right := splitInput(input)
 
-	var l, r int
-	var err error
-	for err == nil {
-		if _, err = fmt.Fscanf(file, "%d %d", &l, &r); err == nil {
-			left = append(left, l)
-			right = append(right, r)
+	fmt.Println("Total Distance:", totalDistance(left, right))
+	fmt.Println("Similarity Score:", similarityScore(left, right))
+}
+func splitInput(input []string) (left []int, right []int) {
+	for _, line := range input {
+		parts := strings.Fields(line)
+		if len(parts) != 2 {
+			log.Fatalf("invalid input line: %v", line)
 		}
+		l, err1 := strconv.Atoi(parts[0])
+		r, err2 := strconv.Atoi(parts[1])
+		if err1 != nil || err2 != nil {
+			log.Fatalf("error parsing integers: %v, %v", err1, err2)
+		}
+		left = append(left, l)
+		right = append(right, r)
 	}
 
 	return left, right
@@ -49,11 +57,4 @@ func totalDistance(left, right []int) int {
 		totalDistance += int(math.Abs(float64(left[i] - right[i])))
 	}
 	return totalDistance
-}
-
-func main() {
-	left, right := readInput("inputs/day01.txt")
-
-	fmt.Println("Total Distance:", totalDistance(left, right))
-	fmt.Println("Similarity Score:", similarityScore(left, right))
 }

@@ -1,28 +1,19 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
+	"github.com/chrisknott91/aoc24/utils"
 	"regexp"
 	"strconv"
 )
 
 func main() {
-	file, err := os.Open("inputs/day03.txt")
-	if err != nil {
-		fmt.Println("error opening file:", err)
-		return
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
+	input := utils.ReadInput("inputs/day03.txt")
 
 	var multiplierPairs [][]int
 	var mulEnabled bool = true
 
-	for scanner.Scan() {
-		line := scanner.Text()
+	for _, line := range input {
 		pairs, mulEnabledStatus := parseLine(line, mulEnabled)
 		mulEnabled = mulEnabledStatus
 		multiplierPairs = append(multiplierPairs, pairs...)
